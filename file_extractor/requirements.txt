@@ -1,0 +1,6 @@
+watchdog
+netCDF4
+pandas
+numpy
+sqlalchemy
+mysql-connector

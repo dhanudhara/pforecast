@@ -1,0 +1,39 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: plastic
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  poodac_downloader:
+    build: ./poodac_downloader
+    volumes:
+      - ./tmp:/app/tmp
+      - ./logs:/app/logs
+    depends_on:
+      file_extractor:
+        condition: service_started
+
+  file_extractor:
+    build: ./file_extractor
+    volumes:
+      - ./tmp:/app/tmp
+    depends_on:
+      db:
+        condition: service_started
+
+  # forecast_service:
+
+  api_endpoint:
+    build: ./api_endpoint
+    ports:
+      - "8001:8001"
+    depends_on:
+      - db
+
+volumes:
+  mysql_data:
