@@ -8,7 +8,8 @@ from watchdog.events import FileSystemEventHandler
 
 
 def log(err):
-    pass
+    with open('/app/logs/err', 'a') as err_file:
+        err_file.write(f"{type(err)}: {err}")
 
 
 class WatchPoodacDownloads(FileSystemEventHandler):
