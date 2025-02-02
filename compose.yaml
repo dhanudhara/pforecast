@@ -22,6 +22,7 @@ services:
     build: ./file_extractor
     volumes:
       - ./tmp:/app/tmp
+      - ./logs:/app/logs
     depends_on:
       db:
         condition: service_started
