@@ -4,7 +4,7 @@ from pandas.core.frame import DataFrame
 
 DB_USER = 'root'
 DB_PSWD = 'password'
-HOST = '127.0.0.1'
+HOST = 'db'
 DB_NAME = 'plastic'
 DB_URL = 'mysql+mysqlconnector://{0}:{1}@{2}/{3}'.format(
     DB_USER,
