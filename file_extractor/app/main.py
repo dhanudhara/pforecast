@@ -9,7 +9,7 @@ from watchdog.events import FileSystemEventHandler
 
 def log(err):
     with open('/app/logs/err', 'a') as err_file:
-        err_file.write(f"{type(err)}: {err}")
+        err_file.write(f"{type(err)}: {err}\n")
 
 
 def write(msg: str):

@@ -12,7 +12,7 @@ def main(coll: str, dest: str, min: int) -> None:
         )
         if status:
             with open('/app/logs/err', 'a') as err_file:
-                err_file.write(f"{type(err)}: {err}")
+                err_file.write(f"{type(err)}: {err}\n")
             sleep(10)  # retry after 10s
             continue
         sleep(min*60)
