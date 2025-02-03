@@ -1,4 +1,5 @@
 .mypy_cache
 .netrc
+.mysql_data
 tmp
 logs
