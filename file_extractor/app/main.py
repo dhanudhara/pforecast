@@ -12,12 +12,19 @@ def log(err):
         err_file.write(f"{type(err)}: {err}")
 
 
+def write(msg: str):
+    with open('app/logs/log', 'a') as log_file:
+        log_file.write(msg)
+
+
 class WatchPoodacDownloads(FileSystemEventHandler):
     def on_modified(self, event):
         if event.src_path.endswith('.nc'):
             try:
+                write("Attempting to tabulate")
                 df = extract.get_dataframe(path=str(event.src_path))
                 tabulate.tabulate(df=df)
+                write("Tabulation completed")
             except Exception as e:
                 log(err=e)
 
