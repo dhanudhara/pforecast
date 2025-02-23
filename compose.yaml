@@ -28,7 +28,13 @@ services:
       db:
         condition: service_started
 
-  # forecast_service:
+  forecast_service:
+    build: ./forecast_service
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      db:
+        condition: service_started
 
   api_endpoint:
     build: ./api_endpoint
