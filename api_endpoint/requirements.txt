@@ -1,3 +1,6 @@
 fastapi
 requests
 uvicorn
+PyMySQL
+cryptography
+sqlalchemy
