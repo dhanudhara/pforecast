@@ -24,9 +24,10 @@ def get_data(
         content={
             "timeRange": f"{stime} - {etime}",
             "boundingBox": ",".join([tlat, tlon, blat, blon]),
-            # "data": [
-            #     dbhandler.get_result(stime, tlat, tlon, blat, blon),
-            # ]
+            "data": [
+                # dbhandler.get_result(stime, tlat, tlon, blat, blon),
+                "Unavailable at the moment"
+            ]
         }
     )
 
