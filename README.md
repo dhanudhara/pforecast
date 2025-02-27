@@ -4,6 +4,16 @@
 
 - Docker
 
+### MySQL environment variables
+
+- Create secrets file:
+
+```sh
+mkdir .secrets && touch .secrets/db_root_password.txt
+```
+
+- add root password to this txt file
+
 ## Launch system
 
 Run:
