@@ -4,11 +4,13 @@ services:
     container_name: mysqldb
     environment:
       MYSQL_DATABASE: plastic
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     ports:
       - "3306:3306"
     volumes:
       - ./mysql_data:/var/lib/mysql
+    secrets:
+      - db_root_password
 
   poodac_downloader:
     build: ./poodac_downloader
@@ -42,3 +44,7 @@ services:
       - "8001:8001"
     depends_on:
       - db
+
+secrets:
+  db_root_password:
+    file: ./.secrets/db_root_password.txt
