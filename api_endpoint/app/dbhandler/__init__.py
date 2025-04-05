@@ -1,52 +1,58 @@
+import re
 from typing import Dict, List
+from flask import jsonify
 from sqlalchemy.orm import Session, declarative_base
 from sqlalchemy import (
     create_engine,
-    Column,
-    TEXT,
-    FLOAT,
-    DOUBLE,
+    text,
 )
 
 
 DB_USER = 'root'
-DB_PSWD = 'password'
+DB_PSWD = 'password'  # get from the env file
 HOST = 'mysqldb:3306'
 DB_NAME = 'plastic'
-DB_URL = 'mysql+pymysql://{0}:{1}@{2}/{3}'.format(
-    DB_USER,
-    DB_PSWD,
-    HOST,
-    DB_NAME
+DB_URL = (
+    f'mysql+pymysql://{DB_USER}:{DB_PSWD}@{HOST}/{DB_NAME}'
 )
 engine = create_engine(DB_URL)
 Base = declarative_base()
 
 
-class Plastics(Base):
-    __tablename__ = 'plastics'
-    time = Column(TEXT, primary_key=True)
-    lat = Column(FLOAT, primary_key=True)
-    lon = Column(FLOAT, primary_key=True)
-    mp_conc = Column(FLOAT)
-    num_mp_samples = Column(DOUBLE)
-    stddev_mp_samples = Column(FLOAT)
+def format_result(row) -> Dict:
+    return {
+        "time": row.time,
+        "lat": row.lat,
+        "lon": row.lon,
+        "mp_conc": row.mp_conc,
+        "num_mp_samples": row.num_mp_samples,
+        "stddev_mp_samples": row.stddev_mp_samples
+    }
 
 
 def get_result(
-    time,
-    tlat, tlon,
-    blat, blon
-) -> List[str]:
-    with Session() as session:
-        result = session.query(Plastics).filter(
-            # Plastics.time == time,
-            Plastics.lat <= tlat,
-            Plastics.lat >= blat,
-            Plastics.lon <= tlon,
-            Plastics.lon >= blon,
-        ).all()
-        return [
-            f"time: {row.time}, lat: {row.lat}, lon: {row.lon}, mp_conc: {row.mp_conc}, num_mp_samples: {row.num_mp_samples}, stddev_mp_samples: {row.stddev_mp_samples}"
-            for row in result
-        ]
+    start_time: str,
+    end_time: str,
+    top_lat: str,
+    top_lon: str,
+    bottom_lat: str,
+    bottom_lon: str
+) -> List[Dict]:
+    tname: str = "plastics"  # TODO: get from sdtsl and edtsl
+    query: str = text(
+        f"""SELECT * FROM {tname.strip()}
+                WHERE time >= :start_time AND time <= :end_time AND
+                lat >= :top_lat AND lat <= :bottom_lat AND
+                lon >= :top_lon AND lon <= :bottom_lon"""
+    )
+    params = {
+        "start_time": start_time,
+        "end_time": end_time,
+        "top_lat": float(top_lat),
+        "bottom_lat": float(bottom_lat),
+        "top_lon": float(top_lon),
+        "bottom_lon": float(bottom_lon)
+    }
+    with Session(engine) as session:
+        result = session.execute(query, params)
+        return [format_result(row) for row in result]
