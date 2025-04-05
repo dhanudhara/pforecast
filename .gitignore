@@ -4,3 +4,5 @@
 mysql_data
 tmp
 logs
+test-api-request.sh
+model_training
