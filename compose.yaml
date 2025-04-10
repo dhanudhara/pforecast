@@ -43,7 +43,8 @@ services:
     ports:
       - "8001:8001"
     depends_on:
-      - db
+      db:
+        condition: service_started
 
 secrets:
   db_root_password:
