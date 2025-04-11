@@ -31,7 +31,10 @@ services:
         condition: service_started
 
   forecast_service:
-    build: ./forecast_service
+    build:
+      context: ./forecast_service
+      args:
+        - DOCKER_BUILDKIT=1
     volumes:
       - ./logs:/app/logs
     depends_on:
